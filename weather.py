@@ -187,13 +187,12 @@ def main(url, url_forecast, key):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        print(sys.argv)
         if sys.argv[1] == "--key":
             try:
                 main(url, url_forecast, sys.argv[2])
             except IndexError:
-                print(colorama.Fore.RED + "Please parse an API key!")
+                print(colorama.Fore.RED + "Please enter an API key!")
         if sys.argv[1] == "--help":
             help(weather)
     else:
-        print(colorama.Fore.RED + "Please parse an API key!")
+        print(colorama.Fore.RED + "Please enter an API key!")
