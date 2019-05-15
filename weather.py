@@ -1,8 +1,5 @@
 import json, requests, pprint, colorama, sys, time
 
-colorama.init()
-
-
 APIkey = "857c4d16c4f5b771c726a6a0e6f60f70"
 url = "http://api.openweathermap.org/data/2.5/weather?"
 
@@ -44,6 +41,7 @@ def print_current_Weather(Id, url, APIkey):
     print("\n" + s)
 
 def main(url, key):
+    colorama.init()
     print(colorama.Fore.YELLOW,r"""                
                         |
                     .   |
@@ -71,12 +69,12 @@ def main(url, key):
                         |
                         |""")
     print(colorama.Fore.GREEN + "[*] Starting up...")
-    time.sleep(1)
+    time.sleep(0.5)
     print("[*] Ready!", end = '\n \n')
-    time.sleep(0.75)
+    time.sleep(0.5)
 
     while True:
-        print("\n[*] Options: \n[1] Search \n[2] Show current weather \n[3] Show forecast")
+        print(f"{colorama.Fore.GREEN}\n[*] Options: \n[1] Search \n[2] Show current weather \n[3] Show forecast \n[4] Exit")
         inpt = input(":: ")
 
         # Search for a city
@@ -104,8 +102,12 @@ def main(url, key):
         # Show current weather
         elif inpt == "2":
             print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
-
-
+        elif inpt == "3":
+            pass
+        elif inpt == "4":
+            break
+        else:
+            print(colorama.Fore.RED + "\n[-] Error! Wrong Input!")
 
 if __name__ == "__main__":
     main(url, APIkey)
