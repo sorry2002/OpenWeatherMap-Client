@@ -17,4 +17,14 @@ A command-line based client for the OpenWeatherMap API.
 Please feel free to report bugs, request features or add examples by submitting a pull request.
 
 ## License
-This work is available under a GNU GPLv3 license (see LICENSE).
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+OpenWeatherMap-Client Copyright © 2019 [Xcal1bur](https://github.com/Xcal1bur)
