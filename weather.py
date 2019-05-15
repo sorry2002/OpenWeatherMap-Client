@@ -34,14 +34,14 @@ def print_current_Weather(Id, url, APIkey):
     s = (f"[+] Weather in {data['name']}, {data['sys']['country']}:\n"
         f"[+] Date:             {time.ctime(data['dt'])}\n"
         f"[+] Description:      {data['weather'][0]['description']}\n"
-        f"[+] Temperature:      {data['main']['temp']}\n"
-        f"[+] Max. Temperature: {data['main']['temp_max']}\n"
-        f"[+] Min. Temperature: {data['main']['temp_min']}\n"
-        f"[+] Pressure:         {data['main']['pressure']}\n"
-        f"[+] Humidity:         {data['main']['humidity']}\n"
-        f"[+] Windspeed:        {data['wind']['speed']}\n"
-        f"[+] Cloudiness:       {data['clouds']['all']}\n")
-    print(s)
+        f"[+] Temperature:      {data['main']['temp']} K° / {round(data['main']['temp'] - 273.15, 2)} C°\n"
+        f"[+] Max. Temperature: {data['main']['temp_max']} K° / {round(data['main']['temp_max'] - 273.15, 2)} C°\n"
+        f"[+] Min. Temperature: {data['main']['temp_min']} K° / {round(data['main']['temp_min'] - 273.15, 2)} C°\n"
+        f"[+] Pressure:         {data['main']['pressure']} hPa / {round(data['main']['pressure'] / 1000, 2)} Bar\n"
+        f"[+] Humidity:         {data['main']['humidity']} %\n"
+        f"[+] Windspeed:        {data['wind']['speed']} m/s / {data['wind']['speed'] * 3.6} km/h\n"
+        f"[+] Cloudiness:       {data['clouds']['all']} %\n")
+    print("\n" + s)
 
 def main(url, key):
     print(colorama.Fore.YELLOW,r"""                
@@ -77,7 +77,7 @@ def main(url, key):
 
     while True:
         print("\n[*] Options: \n[1] Search \n[2] Show current weather \n[3] Show forecast")
-        inpt = input(": ")
+        inpt = input(":: ")
 
         # Search for a city
         if inpt == "1":
@@ -89,9 +89,9 @@ def main(url, key):
                 print(f"[{i}] Name: {e['name']}, Country: {e['country']}, ID: {e['id']}")
             
             print("\n[*] Options:")
-            print("[1] Show current for weather for city \n[2] Show forecast for city \n[3] Exit to main menu")
+            print("[1] Show current weather \n[2] Show forecast \n[3] Exit to main menu")
             
-            inpt = input(": ")
+            inpt = input(":: ")
 
             if inpt == "1":
                 inpt = input("[City Number]: ")
@@ -103,7 +103,7 @@ def main(url, key):
                 continue
         # Show current weather
         elif inpt == "2":
-            pass
+            print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
 
 
 
