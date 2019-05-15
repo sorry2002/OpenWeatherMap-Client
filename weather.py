@@ -1,9 +1,8 @@
 """
 A command-line based client for the OpenWeatherMap API.
 """
-import json, requests, pprint, colorama, sys, time, datetime
+import json, requests, pprint, colorama, sys, time, datetime, pydoc, weather
 
-APIkey = "857c4d16c4f5b771c726a6a0e6f60f70"
 url = "http://api.openweathermap.org/data/2.5/weather?"
 url_forecast = "http://api.openweathermap.org/data/2.5/forecast?"
 
@@ -44,7 +43,6 @@ def getData(complete_url):
     Returns a dict using the requests module.
 
     complete_url: the complete url to either access the forecast or current weather API
-    forcast: Boolean to specifiy 
     """
     return requests.get(complete_url).json()
     
@@ -188,4 +186,14 @@ def main(url, url_forecast, key):
             continue
 
 if __name__ == "__main__":
-    main(url, url_forecast, APIkey)
+    if len(sys.argv) > 1:
+        print(sys.argv)
+        if sys.argv[1] == "--key":
+            try:
+                main(url, url_forecast, sys.argv[2])
+            except IndexError:
+                print(colorama.Fore.RED + "Please parse an API key!")
+        if sys.argv[1] == "--help":
+            help(weather)
+    else:
+        print(colorama.Fore.RED + "Please parse an API key!")
