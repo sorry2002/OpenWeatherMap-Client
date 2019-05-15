@@ -1,7 +1,7 @@
 """
 A command-line based client for the OpenWeatherMap API.
 """
-import json, requests, pprint, colorama, sys, time, datetime, pydoc, weather
+import json, requests, pprint, colorama, sys, time, datetime, weather, argparse
 
 url = "http://api.openweathermap.org/data/2.5/weather?"
 url_forecast = "http://api.openweathermap.org/data/2.5/forecast?"
@@ -186,13 +186,14 @@ def main(url, url_forecast, key):
             continue
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--key":
-            try:
-                main(url, url_forecast, sys.argv[2])
-            except IndexError:
-                print(colorama.Fore.RED + "Please enter an API key!")
-        if sys.argv[1] == "--help":
-            help(weather)
+    parser = argparse.ArgumentParser(description = "A command-line based client for the OpenWeatherMap API.")
+    
+    parser.add_argument("--key", "-k", help = "API key for OpenWeatherMap")
+    parser.add_argument("--doc", help = "Show Documentation", action = "store_true")
+    
+    args = parser.parse_args()
+    
+    if args.doc:
+        help(weather)
     else:
-        print(colorama.Fore.RED + "Please enter an API key!")
+        main(url, url_forecast, args.key)
