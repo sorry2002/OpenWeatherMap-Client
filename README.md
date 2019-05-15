@@ -16,6 +16,20 @@ A command-line based client for the OpenWeatherMap API.
 3.1 If not install it with ``python pip install colorama``
 4. Clone the repository with ``git clone git@github.com:Xcal1bur/OpenWeatherMap-Client.git``
 
+## Usage
+```
+usage: weather.py [-h] [--key KEY] [--doc]
+
+A command-line based client for the OpenWeatherMap API
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --key KEY, -k KEY     API key for OpenWeatherMap
+  --doc                 Show documentation
+
+If no key is parsed the key is read from a file called key.txt. Must only contain one line!
+```
+
 ## Contribution
 Please feel free to report bugs, request features or add examples by submitting a pull request.
 
