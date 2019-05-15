@@ -102,4 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# custom
 key.txt
+bin
+include
+lib64
+lib
+pyvenv.cfg

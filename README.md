@@ -11,12 +11,7 @@ A command-line based client for the OpenWeatherMap API.
 
 ## Installation
 1. Check whether you have the required Python version installed: ``python --version`` / ``python3 --version``
-2. Check whether you have the requests module already installed: ``pip list | grep -i requests`` <br/>
-2.1 If not install it with ``pip install requests``
-3. Check whether you have colorama installed: ``pip list | grep -i colorama`` <br/>
-3.1 If not install it with ``pip install colorama``
-4. Check whether you have argparse installed: ``pip list | grep -i argparse`` <br/>
-4.1 If not install it with ``pip install argparse``
+2. Install all required modules with ``pip install -r requirements.txt``
 5. Clone the repository with ``git clone git@github.com:Xcal1bur/OpenWeatherMap-Client.git``
 
 ## Usage
