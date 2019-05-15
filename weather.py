@@ -1,9 +1,10 @@
-import json, requests, pprint, colorama, sys, time
+import json, requests, pprint, colorama, sys, time, datetime
 
 APIkey = "857c4d16c4f5b771c726a6a0e6f60f70"
 url = "http://api.openweathermap.org/data/2.5/weather?"
+url_forecast = "http://api.openweathermap.org/data/2.5/forecast?"
 
-def setCity(Id, url, APIkey):
+def getURL(Id, url, APIkey):
     complete_url = url + "appid=" + APIkey + "&id=" + Id
     return complete_url
 
@@ -23,11 +24,14 @@ def search(city):
         # e.g. [{'id': 2950159, 'name': 'Berlin', 'country': 'DE', 'coord': {'lon': 13.41053, 'lat': 52.524368}}]
     return l
 
-def getData(complete_url):
-    return requests.get(complete_url).json()
+def getData(complete_url, forecast = False):
+    if forecast:
+        return requests.get(complete_url).json()
+    else:
+        return requests.get(complete_url).json()
 
 def print_current_Weather(Id, url, APIkey):
-    data = getData(setCity(str(Id), url, APIkey))
+    data = getData(getURL(str(Id), url, APIkey), False)
     s = (f"[+] Weather in {data['name']}, {data['sys']['country']}:\n"
         f"[+] Date:             {time.ctime(data['dt'])}\n"
         f"[+] Description:      {data['weather'][0]['description']}\n"
@@ -40,7 +44,19 @@ def print_current_Weather(Id, url, APIkey):
         f"[+] Cloudiness:       {data['clouds']['all']} %\n")
     print("\n" + s)
 
-def main(url, key):
+def print_forecast(Id, url_forecast, key):
+    data = getData(getURL(str(Id), url_forecast, key), True)
+    
+    for i, e in enumerate(data['list']):
+        if i == 0:
+            print("\n" + str(datetime.date.today()) + ":\n")
+        if "00:00:00" in e['dt_txt']:
+            print(f"{str(e['dt_txt'])[:10:]}: \n")
+        print(f"{str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
+        if "21:00:00" in e['dt_txt']:
+            print("")
+
+def main(url, url_forecast, key):
     colorama.init()
     print(colorama.Fore.YELLOW,r"""                
                         |
@@ -74,40 +90,52 @@ def main(url, key):
     time.sleep(0.5)
 
     while True:
-        print(f"{colorama.Fore.GREEN}\n[*] Options: \n[1] Search \n[2] Show current weather \n[3] Show forecast \n[4] Exit")
-        inpt = input(":: ")
-
-        # Search for a city
-        if inpt == "1":
-            print("")
-            l = search(input("[City]: "))
-            print("")
-            print("[*] Results:")
-            for i, e in enumerate(l, 1):
-                print(f"[{i}] Name: {e['name']}, Country: {e['country']}, ID: {e['id']}")
-            
-            print("\n[*] Options:")
-            print("[1] Show current weather \n[2] Show forecast \n[3] Exit to main menu")
-            
+        try:
+            print(f"{colorama.Fore.GREEN}\n[*] Options: \n[1] Search \n[2] Show current weather \n[3] Show forecast \n[4] Exit")
             inpt = input(":: ")
 
+            # Search for a city
             if inpt == "1":
-                inpt = input("[City Number]: ")
                 print("")
-                print_current_Weather(l[(int(inpt) - 1)]['id'], url, key)
+                l = search(input("[City]: "))
+                print("")
+
+                print("[*] Results:")
+                for i, e in enumerate(l, 1):
+                    print(f"[{i}] Name: {e['name']}, Country: {e['country']}, ID: {e['id']}")
+                if l == []:
+                    print(colorama.Fore.RED + "[-] No Results!")
+                    continue
+
+                print(colorama.Fore.GREEN + "\n[*] Options:")
+                print("[1] Show current weather \n[2] Show forecast \n[3] Exit to main menu")
+                
+                inpt = input(":: ")
+
+                if inpt == "1":
+                    inpt = input("[City Number]: ")
+                    print("")
+                    print_current_Weather(l[(int(inpt) - 1)]['id'], url, key)
+                elif inpt == "2":
+                    inpt = input("[City Number]: ")
+                    print("")
+                    print_forecast(l[int(inpt) - 1]['id'], url_forecast, key)
+                else:
+                    continue
+            # Show current weather
             elif inpt == "2":
-                pass
+                print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
+            # Show forecast
+            elif inpt == "3":
+                print_forecast(search(input("[City]: "))[0]['id'], url_forecast, key)
+            # Exit
+            elif inpt == "4":
+                break
             else:
-                continue
-        # Show current weather
-        elif inpt == "2":
-            print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
-        elif inpt == "3":
-            pass
-        elif inpt == "4":
+                print(colorama.Fore.RED + "\n[-] Error! Wrong Input!")
+        except KeyboardInterrupt:
+            print("Exiting...")
             break
-        else:
-            print(colorama.Fore.RED + "\n[-] Error! Wrong Input!")
 
 if __name__ == "__main__":
-    main(url, APIkey)
+    main(url, url_forecast, APIkey)
