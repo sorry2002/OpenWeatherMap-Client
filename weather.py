@@ -78,11 +78,11 @@ def print_forecast(Id, url_forecast, key):
     """
     data = getData(getURL(str(Id), url_forecast, key))
     for i, e in enumerate(data['list']):
-        if i == 0:
+        if i == 0 and str(datetime.date.today()) in e['dt_txt']:
             print(colorama.Fore.WHITE + "\n[*] " + str(datetime.date.today()) + ":\n")
         if "00:00:00" in e['dt_txt']:
-            print(f"[*] {str(e['dt_txt'])[:10:]}: \n")
-        print(f"[+] {str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
+            print(colorama.Fore.WHITE + f"[*] {str(e['dt_txt'])[:10:]}: \n")
+        print(colorama.Fore.WHITE + f"[+] {str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
         if "21:00:00" in e['dt_txt']:
             print("")
 
@@ -184,13 +184,15 @@ def main(url, url_forecast, key):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "A command-line based client for the OpenWeatherMap API.")
-    
     parser.add_argument("--key", "-k", help = "API key for OpenWeatherMap")
     parser.add_argument("--doc", help = "Show Documentation", action = "store_true")
-    
     args = parser.parse_args()
     
     if args.doc:
         help(weather)
-    else:
+    elif args.key == None:
+        with open("".join(str(sys.path[0]) + "/key.txt"), "r") as file:
+            main(url, url_forecast, file.read())
+            file.close()
+    elif args.key != None:
         main(url, url_forecast, args.key)
