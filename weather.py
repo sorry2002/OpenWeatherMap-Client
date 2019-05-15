@@ -52,7 +52,7 @@ def print_current_Weather(Id, url, key):
     Prints multiple lines containing the current weather of a given city.
 
     Id: id of the desired city
-    url: url to access the OpenWeatherMap current weather API. Doc: https://openweathermap.org/current 
+    url: url to access the OpenWeatherMap current weather API. Doc: https://openweathermap.org/current
     key: Key to access the OpenWeatherMap API
     """
     data = getData(getURL(str(Id), url, key))
@@ -183,16 +183,21 @@ def main(url, url_forecast, key):
             continue
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description = "A command-line based client for the OpenWeatherMap API.")
-    parser.add_argument("--key", "-k", help = "API key for OpenWeatherMap")
-    parser.add_argument("--doc", help = "Show Documentation", action = "store_true")
+    parser = argparse.ArgumentParser(description="A command-line based client for the OpenWeatherMap API.")
+    parser.add_argument("--key", "-k", help="API key for OpenWeatherMap or path to single line text file containing the key.")
+    parser.add_argument("--doc", help="Show Documentation", action="store_true")
     args = parser.parse_args()
-    
+
     if args.doc:
         help(weather)
-    elif args.key == None:
+    elif args.key is None:
         with open("".join(str(sys.path[0]) + "/key.txt"), "r") as file:
             main(url, url_forecast, file.read())
             file.close()
-    elif args.key != None:
-        main(url, url_forecast, args.key)
+    elif args.key is not None:
+        if str(args.key).isalnum():
+            main(url, url_forecast, args.key)
+        else:
+            with open(args.key, "r") as file:
+                main(url, url_forecast, file.read())
+                file.close()

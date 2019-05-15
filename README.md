@@ -24,7 +24,7 @@ A command-line based client for the OpenWeatherMap API
 
 optional arguments:
   -h, --help            show this help message and exit
-  --key KEY, -k KEY     API key for OpenWeatherMap
+  --key KEY, -k KEY     API key for OpenWeatherMap or path to single line text file containing the key.
   --doc                 Show documentation
 
 If no key is parsed the key is read from a file called key.txt. Must only contain one line!
