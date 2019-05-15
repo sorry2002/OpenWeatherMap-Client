@@ -66,7 +66,7 @@ def print_current_Weather(Id, url, key):
         f"[+] Humidity:         {data['main']['humidity']} %\n"
         f"[+] Windspeed:        {data['wind']['speed']} m/s / {data['wind']['speed'] * 3.6} km/h\n"
         f"[+] Cloudiness:       {data['clouds']['all']} %")
-    print(colorama.Fore.WHITE + s)
+    print(colorama.Fore.WHITE + "\n" + s)
 
 def print_forecast(Id, url_forecast, key):
     """
@@ -77,13 +77,12 @@ def print_forecast(Id, url_forecast, key):
     key: Key to access the OpenWeatherMap API.
     """
     data = getData(getURL(str(Id), url_forecast, key))
-    print(colorama.Fore.WHITE)
     for i, e in enumerate(data['list']):
         if i == 0:
-            print("\n" + str(datetime.date.today()) + ":\n")
+            print(colorama.Fore.WHITE + "\n[*] " + str(datetime.date.today()) + ":\n")
         if "00:00:00" in e['dt_txt']:
-            print(f"{str(e['dt_txt'])[:10:]}: \n")
-        print(f"{str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
+            print(f"[*] {str(e['dt_txt'])[:10:]}: \n")
+        print(f"[+] {str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
         if "21:00:00" in e['dt_txt']:
             print("")
 
@@ -165,11 +164,9 @@ def main(url, url_forecast, key):
             # Show current weather
             elif inpt == "2":
                 print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
-                print(colorama.Fore.GREEN)
             # Show forecast
             elif inpt == "3":
                 print_forecast(search(input("[City]: "))[0]['id'], url_forecast, key)
-                print(colorama.Fore.GREEN)
             # Exit
             elif inpt == "4":
                 break
