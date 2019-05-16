@@ -64,7 +64,7 @@ def print_current_Weather(Id, url, key):
         f"[+] Min. Temperature: {data['main']['temp_min']} K° / {round(data['main']['temp_min'] - 273.15, 2)} C°\n"
         f"[+] Pressure:         {data['main']['pressure']} hPa / {round(data['main']['pressure'] / 1000, 2)} Bar\n"
         f"[+] Humidity:         {data['main']['humidity']} %\n"
-        f"[+] Windspeed:        {data['wind']['speed']} m/s / {data['wind']['speed'] * 3.6} km/h\n"
+        f"[+] Windspeed:        {data['wind']['speed']} m/s / {round(data['wind']['speed'] * 3.6, 2)} km/h\n"
         f"[+] Cloudiness:       {data['clouds']['all']} %")
     print(colorama.Fore.WHITE + "\n" + s)
 
