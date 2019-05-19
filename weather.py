@@ -77,12 +77,13 @@ def print_forecast(Id, url_forecast, key):
     key: Key to access the OpenWeatherMap API.
     """
     data = getData(getURL(str(Id), url_forecast, key))
+    print(colorama.Fore.WHITE)
     for i, e in enumerate(data['list']):
         if i == 0 and str(datetime.date.today()) in e['dt_txt']:
-            print(colorama.Fore.WHITE + "\n[*] " + str(datetime.date.today()) + ":\n")
+            print("\n[*] " + str(datetime.date.today()) + ":\n")
         if "00:00:00" in e['dt_txt']:
-            print(colorama.Fore.WHITE + f"[*] {str(e['dt_txt'])[:10:]}: \n")
-        print(colorama.Fore.WHITE + f"[+] {str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
+            print(f"[*] {str(e['dt_txt'])[:10:]}: \n")
+        print(f"[+] {str(e['dt_txt'])[11::]}: {e['weather'][0]['description']} at {round(e['main']['temp'] - 273.15, 2)} °C \n", end = "")
         if "21:00:00" in e['dt_txt']:
             print("")
 
@@ -129,7 +130,7 @@ def main(url, url_forecast, key):
             if inpt == "1":
                 print("")
                 l = search(input("[City]: "))
-                print("")
+                print(colorama.Fore.WHITE + "")
 
                 # Print the results for the search query
                 print("[*] Results:")
@@ -172,15 +173,10 @@ def main(url, url_forecast, key):
                 break
             else:
                 print(colorama.Fore.RED + "\n[-] Error! Wrong Input!")
-        except KeyboardInterrupt:
-            print("Exiting...")
+        except (KeyboardInterrupt, ConnectionResetError, ConnectionAbortedError, ConnectionError, ConnectionRefusedError) as Error:
+            print(str(Error), file=sys.stderr)
+            print(colorama.Fore.RED + "An Error occured! Exiting!")
             break
-        except ConnectionResetError:
-            print(colorama.Fore.RED + "ConnectionResetError! Please try again.")
-            continue
-        except ConnectionAbortedError:
-            print(colorama.Fore.RED + "ConncectionAbortedError! Please try again.")
-            continue
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A command-line based client for the OpenWeatherMap API.")
