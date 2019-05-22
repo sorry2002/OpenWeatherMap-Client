@@ -4,7 +4,7 @@
 A command-line based client for the OpenWeatherMap API.
 
 ## Requirements
-- Python 3.X
+- Python 3.6+
 - Python requests
 - Python colorama
 - Python argparse
