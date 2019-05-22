@@ -7,7 +7,6 @@ A command-line based client for the OpenWeatherMap API.
 - Python 3.6+
 - Python requests
 - Python colorama
-- Python argparse
 
 ## Installation
 1. Check whether you have the required Python version installed: ``python --version`` / ``python3 --version``
