@@ -28,12 +28,8 @@ def search(city):
 
     l = []
     for e in data:
-        try:
-            if str(city).lower() == e['name'].lower():
-                l.append(e)
-        except TypeError:
-            print("Invalid city name!")
-            break
+        if str(city).lower() == e['name'].lower():
+            l.append(e)
         # Returns a list of hits for search quary
         # e.g. [{'id': 2950159, 'name': 'Berlin', 'country': 'DE', 'coord': {'lon': 13.41053, 'lat': 52.524368}}]
     return l
@@ -164,10 +160,16 @@ def main(url, url_forecast, key):
                     continue
             # Show current weather
             elif inpt == "2":
-                print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
+                try:
+                    print_current_Weather(search(input("[City]: "))[0]['id'], url, key)
+                except (KeyError, IndexError) as err:
+                    print(colorama.Fore.RED + "\n[-] Error: " + str(err) + ": invalid city")
             # Show forecast
             elif inpt == "3":
-                print_forecast(search(input("[City]: "))[0]['id'], url_forecast, key)
+                try:
+                    print_forecast(search(input("[City]: "))[0]['id'], url_forecast, key)
+                except (KeyError, IndexError) as err:
+                    print(colorama.Fore.RED + "\n[-] Error: " + str(err) + ": invalid city")
             # Exit
             elif inpt == "4":
                 break
