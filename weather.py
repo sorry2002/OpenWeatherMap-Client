@@ -175,8 +175,8 @@ def main(url, url_forecast, key):
                 break
             else:
                 print(colorama.Fore.RED + "\n[-] Error! Wrong Input!")
-        except (KeyboardInterrupt, ConnectionResetError, ConnectionAbortedError, ConnectionError, ConnectionRefusedError) as Error:
-            print(str(Error), file=sys.stderr)
+        except (KeyboardInterrupt, ConnectionResetError, ConnectionAbortedError, ConnectionError, ConnectionRefusedError) as err:
+            print(str(err), file=sys.stderr)
             print(colorama.Fore.RED + "An Error occured! Exiting!")
             break
 
@@ -189,9 +189,15 @@ if __name__ == "__main__":
     if args.doc:
         help(weather)
     elif args.key is None:
-        with open("".join(str(sys.path[0]) + "/key.txt"), "r") as file:
-            main(url, url_forecast, file.read())
-            file.close()
+        try:
+            with open("".join(str(sys.path[0]) + "/key.txt"), "r") as file:
+                main(url, url_forecast, file.read())
+                file.close()
+        except FileNotFoundError as err:
+            print(colorama.Fore.RED + "[-] Error:", err)
+            print(colorama.Fore.YELLOW + "Create a file called key.txt with your API-Key in the same directoy or parse the key with --key or -r when executing.")
+            print(colorama.Fore.WHITE)
+            parser.print_help()
     elif args.key is not None:
         if str(args.key).isalnum():
             main(url, url_forecast, args.key)
