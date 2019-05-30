@@ -111,3 +111,4 @@ lib64
 lib
 pyvenv.cfg
 send_weather.py
+setup.py
