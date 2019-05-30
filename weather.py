@@ -195,7 +195,7 @@ if __name__ == "__main__":
                 file.close()
         except FileNotFoundError as err:
             print(colorama.Fore.RED + "[-] Error:", err)
-            print(colorama.Fore.YELLOW + "Create a file called key.txt with your API-Key in the same directoy or parse the key with --key or -r when executing.")
+            print(colorama.Fore.YELLOW + "Create a file called key.txt with your API-Key in the same directory or parse the key with --key or -r when executing.")
             print(colorama.Fore.WHITE)
             parser.print_help()
     elif args.key is not None:
