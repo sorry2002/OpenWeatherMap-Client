@@ -1,5 +1,7 @@
 # OpenWeatherMap-Client
 
+![pic](https://i.imgur.com/GDDp8tZ.png)
+
 ## Description
 A command-line based client for the OpenWeatherMap API.
 
@@ -13,6 +15,7 @@ A command-line based client for the OpenWeatherMap API.
 2. Clone the repository with ``git clone git@github.com:Xcal1bur/OpenWeatherMap-Client.git``
 3. Install all required modules with ``pip install -r requirements.txt``
 
+Alternatively you can install the requiered modules with your package manager of choice to avoid conflicts.
 ## Usage
 ```
 usage: weather.py [-h] [--key KEY] [--doc]
@@ -26,6 +29,8 @@ optional arguments:
 
 If no key is parsed the key is read from a file called key.txt. Must only contain one line!
 ```
+
+**In order to get your own API-Key you have to create an [account at OpenWeatherMap.org](https://home.openweathermap.org/users/sign_up) and generate a key.**
 
 ## Contribution
 Please feel free to report bugs, request features or add examples by submitting a pull request.
