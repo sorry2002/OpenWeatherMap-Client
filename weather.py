@@ -28,7 +28,9 @@ def search(city):
 
     l = []
     for e in data:
-        if str(city).lower() == e['name'].lower():
+        if str(city).lower() == e['name'].lower() and len(l)<100:
+            l.append(e)
+        elif str(city).lower() in e['name'].lower()[:len(city):] and len(l)<100:
             l.append(e)
         # Returns a list of hits for search quary
         # e.g. [{'id': 2950159, 'name': 'Berlin', 'country': 'DE', 'coord': {'lon': 13.41053, 'lat': 52.524368}}]
@@ -84,7 +86,6 @@ def print_forecast(Id, url_forecast, key):
             print("")
 
 def main(url, url_forecast, key):
-    # Initializing colorama to output coloured text
     colorama.init()
     print(colorama.Fore.YELLOW,r"""                
                         |
@@ -126,7 +127,7 @@ def main(url, url_forecast, key):
             if inpt == "1":
                 print("")
                 l = search(input("[City]: "))
-                print(colorama.Fore.WHITE + "")
+                print(colorama.Fore.WHITE)
 
                 # Print the results for the search query
                 print("[*] Results:")
@@ -175,9 +176,11 @@ def main(url, url_forecast, key):
                 break
             else:
                 print(colorama.Fore.RED + "\n[-] Error! Wrong Input!")
-        except (KeyboardInterrupt, ConnectionResetError, ConnectionAbortedError, ConnectionError, ConnectionRefusedError) as err:
-            print(str(err), file=sys.stderr)
-            print(colorama.Fore.RED + "An Error occured! Exiting!")
+        except (ConnectionResetError, ConnectionAbortedError, ConnectionError, ConnectionRefusedError) as err:
+            print(colorama.Fore.RED + "A connection error occured! Exiting!")
+            break
+        except KeyboardInterrupt as err:
+            print(colorama.Fore.RED + "\nExiting!")
             break
 
 if __name__ == "__main__":
