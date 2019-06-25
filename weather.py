@@ -14,7 +14,7 @@ def get_URL(Id, url, key):
     url: Either the forecast or current weather url
     key: Key to access the API
     """
-    complete_url = url + "appid=" + key + "&id=" + Id
+    complete_url = str(url) + "appid=" + str(key) + "&id=" + str(Id)
     return complete_url
 
 def search(city):
@@ -43,7 +43,21 @@ def get_Data(complete_url):
     complete_url: the complete url to either access the forecast or current weather API
     """
     return requests.get(complete_url).json()
+
+def validate_key(key, url):
+    """
+    Validates the parsed API-Key.
+    """
+    complete_url = get_URL(search("Berlin")[0]["id"], url, key)
     
+    data = get_Data(complete_url)
+    
+    if data['cod'] == 401:
+        # Print error message
+        print(colorama.Fore.RED, data['message'])
+        return False
+    else:
+        return True        
 
 def print_current_Weather(Id, url, key):
     """
@@ -191,7 +205,7 @@ if __name__ == "__main__":
 
     if args.doc:
         help(weather)
-    elif args.key is None:
+    elif args.key == None:
         try:
             with open("".join(str(sys.path[0]) + "/key.txt"), "r") as file:
                 main(url, url_forecast, file.read())
@@ -201,10 +215,13 @@ if __name__ == "__main__":
             print(colorama.Fore.YELLOW + "Create a file called key.txt with your API-Key in the same directory or parse the key with --key or -r when executing.")
             print(colorama.Fore.WHITE)
             parser.print_help()
-    elif args.key is not None:
-        if str(args.key).isalnum():
+    elif args.key != None:
+        if str(args.key).isalnum() and validate_key(args.key, url):
             main(url, url_forecast, args.key)
         else:
-            with open(args.key, "r") as file:
-                main(url, url_forecast, file.read())
-                file.close()
+            try:
+                with open(args.key, "r") as file:
+                    main(url, url_forecast, file.read())
+                    file.close()
+            except:
+                exit()
