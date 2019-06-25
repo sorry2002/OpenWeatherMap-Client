@@ -6,7 +6,7 @@ import json, requests, pprint, colorama, sys, time, datetime, weather, argparse
 url = "http://api.openweathermap.org/data/2.5/weather?"
 url_forecast = "http://api.openweathermap.org/data/2.5/forecast?"
 
-def getURL(Id, url, key):
+def get_URL(Id, url, key):
     """
     Joins Id, url and key to a complete url in order to access the API
 
@@ -36,7 +36,7 @@ def search(city):
         # e.g. [{'id': 2950159, 'name': 'Berlin', 'country': 'DE', 'coord': {'lon': 13.41053, 'lat': 52.524368}}]
     return l
 
-def getData(complete_url):
+def get_Data(complete_url):
     """
     Returns a dict using the requests module.
 
@@ -53,7 +53,7 @@ def print_current_Weather(Id, url, key):
     url: url to access the OpenWeatherMap current weather API. Doc: https://openweathermap.org/current
     key: Key to access the OpenWeatherMap API
     """
-    data = getData(getURL(str(Id), url, key))
+    data = get_Data(get_URL(str(Id), url, key))
     s = (f"[+] Weather in {data['name']}, {data['sys']['country']}:\n"
         f"[+] Date:             {time.ctime(data['dt'])}\n"
         f"[+] Description:      {data['weather'][0]['description']}\n"
@@ -74,7 +74,7 @@ def print_forecast(Id, url_forecast, key):
     url_forecast: url to access the OpenWeatherMap forecast API. Doc: https://openweathermap.org/forecast5
     key: Key to access the OpenWeatherMap API.
     """
-    data = getData(getURL(str(Id), url_forecast, key))
+    data = get_Data(get_URL(str(Id), url_forecast, key))
     print(colorama.Fore.WHITE)
     for i, e in enumerate(data['list']):
         if i == 0 and str(datetime.date.today()) in e['dt_txt']:
