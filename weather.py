@@ -206,6 +206,7 @@ if __name__ == "__main__":
     if args.doc:
         help(weather)
     elif args.key == None:
+        # Try to open key.txt for API-Key
         try:
             with open("".join(str(sys.path[0]) + "/key.txt"), "r") as file:
                 main(url, url_forecast, file.read())
@@ -219,6 +220,7 @@ if __name__ == "__main__":
         if str(args.key).isalnum() and validate_key(args.key, url):
             main(url, url_forecast, args.key)
         else:
+            # Try to open parsed key value as path to file
             try:
                 with open(args.key, "r") as file:
                     main(url, url_forecast, file.read())
