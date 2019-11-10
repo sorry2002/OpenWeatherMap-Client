@@ -1,7 +1,11 @@
 """
 A command-line based client for the OpenWeatherMap API.
+ python weather.py -k key.txt
 """
 import json, requests, pprint, colorama, sys, time, datetime, weather, argparse
+import smtplib, ssl
+import getpass
+import os
 
 url = "http://api.openweathermap.org/data/2.5/weather?"
 url_forecast = "http://api.openweathermap.org/data/2.5/forecast?"
@@ -33,11 +37,11 @@ def search(city):
         elif str(city).lower() in e['name'].lower()[:len(city):] and len(l)<100:
             l.append(e)
         # Returns a list of hits for search quary
-        # e.g. [{'id': 2950159, 'name': 'Berlin', 'country': 'DE', 'coord': {'lon': 13.41053, 'lat': 52.524368}}]
+        # e.g. [{ "id": 628281,    "name": "Homyel’skaya Voblasts’",    "country": "BY",    "coord": {      "lon": 30,      "lat": 52}]
     return l
 
-def get_Data(complete_url):
     """
+def get_Data(complete_url):
     Returns a dict using the requests module.
 
     complete_url: the complete url to either access the forecast or current weather API
@@ -79,6 +83,58 @@ def print_current_Weather(Id, url, key):
         f"[+] Windspeed:        {data['wind']['speed']} m/s / {round(data['wind']['speed'] * 3.6, 2)} km/h\n"
         f"[+] Cloudiness:       {data['clouds']['all']} %")
     print(colorama.Fore.WHITE + "\n" + s)
+    
+def send_current_Weather(Id, url, key, receiver_email):
+    """
+    Id: id of the desired city
+    url: url to access the OpenWeatherMap current weather API. Doc: https://openweathermap.org/current
+    key: Key to access the OpenWeatherMap API
+    """
+    data = get_Data(get_URL(str(Id), url, key))
+    s = (f"[+] Weather in {data['name']}, {data['sys']['country']}:\n"
+        f"[+] Date:             {time.ctime(data['dt'])}\n"
+        f"[+] Description:      {data['weather'][0]['description']}\n"
+        f"[+] Temperature:      {data['main']['temp']} K° / {round(data['main']['temp'] - 273.15, 2)} C°\n"
+        f"[+] Max. Temperature: {data['main']['temp_max']} K° / {round(data['main']['temp_max'] - 273.15, 2)} C°\n"
+        f"[+] Min. Temperature: {data['main']['temp_min']} K° / {round(data['main']['temp_min'] - 273.15, 2)} C°\n"
+        f"[+] Pressure:         {data['main']['pressure']} hPa / {round(data['main']['pressure'] / 1000, 2)} Bar\n"
+        f"[+] Humidity:         {data['main']['humidity']} %\n"
+        f"[+] Windspeed:        {data['wind']['speed']} m/s / {round(data['wind']['speed'] * 3.6, 2)} km/h\n"
+        f"[+] Cloudiness:       {data['clouds']['all']} %")
+    #print(colorama.Fore.WHITE + "\n" + s)
+    
+    print(env_utils.get_env('GMAIL_USER'))  #=> sradevops@gmail.com
+    print(env_utils.get_env('GMAIL_PASSWORD'))
+    smtp_server = "smtp.gmail.com"
+    port = 587  # For starttls
+    sender_email = env_utils.get_env('GMAIL_USER')
+    password = env_utils.get_env('GMAIL_PASSWORD')
+    #receiver_email = "sradevops@gmail.com"
+    # password = getpass.getpass('Password:')
+
+    message = """\
+    Subject: Weather from command-line based client for the OpenWeatherMap API
+    Weather in {}, 
+    Temperature: {}, 
+    Pressure: {}, 
+    Humidity: {} """.format('name', 'temp', 'pressure', 'humidity')
+
+    context = ssl._create_unverified_context()
+
+    # Try to log in to server and send email
+    try:
+        server = smtplib.SMTP(smtp_server,port)
+        server.ehlo() # Can be omitted
+        server.starttls(context=context) # Secure the connection
+        server.ehlo() # Can be omitted
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
+    except Exception as e:
+        # Print any error messages to stdout
+        print(e)
+    finally:
+        server.quit()
 
 def print_forecast(Id, url_forecast, key):
     """
@@ -161,8 +217,17 @@ def main(url, url_forecast, key):
                 # Show current weather
                 if inpt == "1":
                     inpt = input("[City Number]: ")
-                    print("")
-                    print_current_Weather(l[(int(inpt) - 1)]['id'], url, key)
+                      if receiver_email == 0
+                        print("")
+                        print_current_Weather(l[(int(inpt) - 1)]['id'], url, key)
+                      else 
+                                              
+                        message = """\
+                        Subject: rate for {} per {} dollars
+
+                        here is the rate {} """.format('one', 'two', 'three')
+                        
+                    
                     print(colorama.Fore.GREEN)
                 # Show forecast
                 elif inpt == "2":
@@ -200,11 +265,17 @@ def main(url, url_forecast, key):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A command-line based client for the OpenWeatherMap API.")
     parser.add_argument("--key", "-k", help="API key for OpenWeatherMap or path to single line text file containing the key.")
+    parser.add_argument("--mail", "-m", help="to send an e-mail with current temperature, pressure, humidity to all recipients from emails list.")
+
     parser.add_argument("--doc", help="Show Documentation", action="store_true")
     args = parser.parse_args()
 
     if args.doc:
         help(weather)
+    elif args.mail != None:
+        receiver_email = args.mail
+    elif args.mail == None:
+        receiver_email = 0  
     elif args.key == None:
         # Try to open key.txt for API-Key
         try:
