@@ -89,6 +89,7 @@ def send_current_Weather(Id, url, key, receiver_email):
     Id: id of the desired city
     url: url to access the OpenWeatherMap current weather API. Doc: https://openweathermap.org/current
     key: Key to access the OpenWeatherMap API
+    receiver_email: if exists, send an e-mail temp, pressure, humidity
     """
     data = get_Data(get_URL(str(Id), url, key))
     s = (f"[+] Weather in {data['name']}, {data['sys']['country']}:\n"
@@ -217,15 +218,16 @@ def main(url, url_forecast, key):
                 # Show current weather
                 if inpt == "1":
                     inpt = input("[City Number]: ")
-                      if receiver_email == 0
-                        print("")
-                        print_current_Weather(l[(int(inpt) - 1)]['id'], url, key)
-                      else 
-                                              
-                        message = """\
-                        Subject: rate for {} per {} dollars
-
-                        here is the rate {} """.format('one', 'two', 'three')
+                        if receiver_email == 0:
+                            print("")
+                            print_current_Weather(l[(int(inpt) - 1)]['id'], url, key)
+                        else                                              
+                            message = """\
+                            Subject: rate for {} per {} dollars
+                            
+                            here is the rate {} 
+                            """.format('one', 'two', 'three')
+                        
                         
                     
                     print(colorama.Fore.GREEN)
