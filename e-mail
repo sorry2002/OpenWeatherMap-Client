@@ -1,0 +1,57 @@
+import smtplib, ssl
+import getpass
+import os
+# from envbash import load_envbash
+# env_utils.get_env('FOO')
+
+load_envbash('env.bash')
+print(env_utils.get_env('GMAIL_USER'))  #=> sradevops@gmail.com
+print(env_utils.get_env('GMAIL_PASSWORD'))
+smtp_server = "smtp.gmail.com"
+port = 587  # For starttls
+sender_email = env_utils.get_env('GMAIL_USER')
+password = env_utils.get_env('GMAIL_PASSWORD')
+receiver_email = "sradevops@gmail.com"
+# password = getpass.getpass('Password:')
+
+message = """\
+Subject: rate for {} per {} dollars
+
+here is the rate {} """.format('one', 'two', 'three')
+
+context = ssl._create_unverified_context()
+
+# Try to log in to server and send email
+try:
+    server = smtplib.SMTP(smtp_server,port)
+    server.ehlo() # Can be omitted
+    server.starttls(context=context) # Secure the connection
+    server.ehlo() # Can be omitted
+    server.login(sender_email, password)
+    server.sendmail(sender_email, receiver_email, message)
+
+except Exception as e:
+    # Print any error messages to stdout
+    print(e)
+finally:
+    server.quit()
+
+"""
+nano ~/.bashrc
+nano /etc/environment
+ source .bashrc
+export GMAIL_USER="sradevops@gmail.com, sradevops@gmail.com" 
+export GMAIL_PASSWORD="Re19041984"
+
+rate for one per two dollars
+Входящие
+x
+
+sradevops@gmail.com 
+
+02:42 (0 минут назад)
+
+кому: скрытая копия: я 
+
+here is the rate three 
+"""
