@@ -55,3 +55,25 @@ sradevops@gmail.com
 
 here is the rate three 
 """
+
+>>> email_list = "mail1@mail.com,mail2@mail.com, mail3@mail.com mail4@mail.com"
+>>> [i for x in email_list.split(',') if x for i in x.split(' ') if i]
+['mail1@mail.com', 'mail2@mail.com', 'mail3@mail.com', 'mail4@mail.com']
+
+Python3:
+Use https://openweathermap.org/api , os, requests, argparser, smtplib to create python command-line tool 
+to show current weather.
+This tool should use 3 parameters:  city, apikeyfile , and optional �emails� - comma-separated list. 
+(Use .split in python to separate)
+If emails exists - script should check and read  Gmail user and password from environment variables 
+GMAIL_USER,  GMAIL_PASSWORD and use them to send an e-mail with current 
+temperature, pressure, humidity to all recipients from emails list.
+
+Else print this data to console.
+
+apikeyfile - path to file with openweathermap api key.
+Note: you will receive openweathermap api key on mail after free registration. 
+It will not be activated immediately.  Need to wait a couple of hours.
+
+Bash:
+Create a bash script to reproduce above functionality. Use curl, jq , mail.
