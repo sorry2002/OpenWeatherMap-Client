@@ -38,7 +38,7 @@ def search(city):
         elif str(city).lower() in e['name'].lower()[:len(city):] and len(l)<100:
             l.append(e)
         # Returns a list of hits for search quary
-        # e.g. [{ "id": 628281,    "name": "Homyel’skaya Voblasts’",    "country": "BY",    "coord": {      "lon": 30,      "lat": 52}]
+        # e.g. [{ "id": 628281,    "name": "Homyel",    "country": "BY",    "coord": {      "lon": 30,      "lat": 52}]
     return l
 
     """
@@ -112,7 +112,10 @@ def send_current_Weather(Id, url, key, contact):
     sender_email = env_utils.get_env('GMAIL_USER')
     password = env_utils.get_env('GMAIL_PASSWORD')
     #receiver_email = "sradevops@gmail.com"
-    receiver_email = emails
+    receiver_email = contact
+    
+    print ("GMAIL_USER: "+ env_utils.get_env('GMAIL_USER'))
+    print ("receiver_email: "+ receiver_email)
 
     message = """\
     Subject: Weather from command-line based client for the OpenWeatherMap API
@@ -281,7 +284,7 @@ if __name__ == "__main__":
         #     emails.append(a_contact.split(","))
         #     return emails
 
-        print ("list mail to: "+ args.mail)
+        print ("mail var: "+ args.mail)
             
         [i 
         for x in args.mail.split(',') 
@@ -292,9 +295,9 @@ if __name__ == "__main__":
 
         print ("list sending mail to: "+ args.mail)
 
-    elif args.mail == None:
+    elif args.mail == '':
         # print weather data to console
-        print ("print weather data to console: "+ args.mail)
+        print ("print weather data to console '' "+ args.mail)
 
     elif args.key == None:
         # Try to open key.txt for API-Key
