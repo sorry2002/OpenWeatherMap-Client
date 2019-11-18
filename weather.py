@@ -295,9 +295,9 @@ if __name__ == "__main__":
 
         print ("list sending mail to: "+ args.mail)
 
-    elif args.mail == '':
-        # print weather data to console
-        print ("print weather data to console '' "+ args.mail)
+    # elif args.mail == '':
+    #     # print weather data to console
+    #     print ("print weather data to console '' "+ args.mail)
 
     elif args.key == None:
         # Try to open key.txt for API-Key
